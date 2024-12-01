@@ -1,0 +1,52 @@
+# GraphQL schema for Household and Pet entities
+
+type Household {
+  eircode: String!
+  numberOfOccupants: Int!
+  maxNumberOfOccupants: Int!
+  ownerOccupied: Boolean!
+}
+
+type Pet {
+  id: ID!
+  name: String!
+  animalType: String!
+  breed: String!
+  age: Int!
+  household: Household!
+}
+
+type PetNameBreedDTO {
+  name: String!
+  breed: String!
+}
+
+type Query {
+  # Household queries
+  getAllHouseholds: [Household]
+  findHouseholdsWithNoPets: [Household]
+  findOwnerOccupiedHouseholds: [Household]
+  getHouseholdByEircode(eircode: String!): Household
+  getHouseholdStatistics: String
+
+  # Pet queries
+  getAllPets: [Pet]
+  getPetById(id: ID!): Pet
+  findPetsByAnimalType(animalType: String!): [Pet]
+  findPetsByBreed(breed: String!): [Pet]
+  getNameAndBreed: [PetNameBreedDTO]
+  getPetStatistics: String
+}
+
+type Mutation {
+  # Household mutations
+  createHousehold(eircode: String!, numberOfOccupants: Int!, maxNumberOfOccupants: Int!, ownerOccupied: Boolean!): Household
+  updateHousehold(eircode: String!, numberOfOccupants: Int, maxNumberOfOccupants: Int, ownerOccupied: Boolean): Household
+  deleteHouseholdByEircode(eircode: String!): Boolean
+
+  # Pet mutations
+  createPet(name: String!, animalType: String!, breed: String!, age: Int!, householdEircode: String!): Pet
+  updatePet(id: ID!, name: String, animalType: String, breed: String, age: Int, householdEircode: String): Pet
+  deletePetById(id: ID!): Boolean
+  deletePetsByName(name: String!): Boolean
+}
